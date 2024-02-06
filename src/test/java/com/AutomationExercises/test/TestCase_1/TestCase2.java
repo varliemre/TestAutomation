@@ -51,8 +51,10 @@ public class TestCase2 {
         driver.get("http://automationexercise.com");
 
         //3. Verify that home page is visible successfully
-        WebElement logo = driver.findElement(By.xpath("(//a[@href='/'])[1]"));
-        Assert.assertTrue(logo.isDisplayed(),"home page is verified");
+        System.out.println("driver.getCurrentUrl() = " + driver.getCurrentUrl());
+        String actualUrl = driver.getCurrentUrl();
+        String expectedUrl = "https://automationexercise.com/";
+        Assert.assertEquals(actualUrl,expectedUrl);
 
         //4. Click on 'Signup / Login' button
         WebElement loginButton = driver.findElement(By.partialLinkText("Signup / Login"));

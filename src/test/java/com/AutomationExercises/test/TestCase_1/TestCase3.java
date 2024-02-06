@@ -48,7 +48,7 @@ public class TestCase3 {
     }
 
     @Test
-    public void tc02() {
+    public void tc02() throws InterruptedException {
 
         //2. Navigate to url 'http://automationexercise.com'
         driver.get("http://automationexercise.com");
@@ -62,6 +62,7 @@ public class TestCase3 {
         //4. Click on 'Signup / Login' button
         WebElement loginButton = driver.findElement(By.partialLinkText("Signup / Login"));
         loginButton.click();
+        Thread.sleep(2000);
 
         //5. Verify 'Login to your account' is visible
         WebElement loginText = driver.findElement(By.xpath("//*[text()='Login to your account']"));
