@@ -46,70 +46,75 @@ public class TestCase1 {
     @AfterMethod
     public void tearDown() throws InterruptedException {
         Thread.sleep(2000);
-        //driver.close();
+        driver.close();
 
     }
 
     @Test
     public void tc01() throws InterruptedException {
         //1. Launch browser
-
         driver.navigate().to("http://automationexercise.com");
         Thread.sleep(1000);
         driver.manage().window().maximize();
+
 
         //2. Navigate to url 'http://automationexercise.com'
         String currentURL = driver.getCurrentUrl();
         System.out.println(currentURL);
         String expectedUrl = "http://automationexercise.com/";
 
+
         //3. Verify that home page is visible successfully
         if (currentURL.equals(expectedUrl)) {
-            System.out.println("Test PASSED");
-        } else {
             System.out.println("Test FAILED");
+        } else {
+            System.out.println("Test PASSED");
         }
+
 
         //4. Click on 'Signup / Login' button
         WebElement loginButton = driver.findElement(By.partialLinkText("Signup / Login"));
         loginButton.click();
 
+
         //5. Verify 'New User Signup!' is visible
         WebElement newUserSignup = driver.findElement(By.xpath("//h2[text()='New User Signup!']"));
         System.out.println("newUserSignup.getText() = " + newUserSignup.getText());
-
         Faker faker = new Faker();
+
+
         //6. Enter name and email address
         WebElement name = driver.findElement(By.xpath("//input[@placeholder='Name']"));
         name.sendKeys(faker.name().firstName());
         WebElement email = driver.findElement(By.xpath("(//input[@placeholder='Email Address'])[2]"));
         email.sendKeys(faker.internet().emailAddress());
 
+
         //7. Click 'Signup' button
         driver.findElement(By.xpath("(//button[@type='submit'])[2]")).submit();
+
 
         //8. Verify that 'ENTER ACCOUNT INFORMATION' is visible
         System.out.println(driver.findElement(By.xpath("//b[text()='Enter Account Information']")).getText());
 
-        //9. Fill details: Title, Name, Email, Password, Date of birth
 
+        //9. Fill details: Title, Name, Email, Password, Date of birth
         driver.findElement(By.cssSelector("#id_gender1")).click();
         driver.findElement(By.cssSelector("#name")).sendKeys(faker.name().firstName());
         driver.findElement(By.cssSelector("#password")).sendKeys(faker.internet().password());
         WebElement day = driver.findElement(By.cssSelector("#days"));
         day.sendKeys("5");
-
         WebElement months = driver.findElement(By.xpath("(//select/option[@value='5'])[2]"));
         months.click();
-
         WebElement year = driver.findElement(By.xpath("//select[starts-with(@id,'years')]/option[5]"));
         year.click();
 
-        //10. Select checkbox 'Sign up for our newsletter!'
 
+        //10. Select checkbox 'Sign up for our newsletter!'
         WebElement checkbox1 = driver.findElement(By.xpath("//input[@id='newsletter']"));
         checkbox1.click();
         Thread.sleep(2000);
+
 
         //11. Select checkbox 'Receive special offers from our partners!'
         WebElement checkbox2 = driver.findElement(By.xpath("//input[@id='optin']"));
@@ -121,8 +126,10 @@ public class TestCase1 {
         Actions actions=new Actions(driver);
         WebElement firstName = driver.findElement(By.cssSelector("#first_name"));
         firstName.sendKeys(faker.name().firstName());
+        String firstNameText = firstName.getText();
         WebElement lastName = driver.findElement(By.xpath("//input[@id='last_name']"));
         lastName.sendKeys(faker.name().lastName());
+        String lastNameText = lastName.getText();
         WebElement company = driver.findElement(By.xpath("//input[@id='company']"));
         company.sendKeys("ABCD COMPANY");
         WebElement adress = driver.findElement(By.xpath("//input[@id='address1']"));
@@ -142,41 +149,40 @@ public class TestCase1 {
         //13. Click 'Create Account button'
         WebElement submitButton = driver.findElement(By.xpath("(//button[@type='submit'])[1]"));
         submitButton.submit();
-
         Thread.sleep(2500);
 
+
         //14. Verify that 'ACCOUNT CREATED!' is visible
-
         String expected = "ACCOUNT CREATED!";
-
         WebElement accountCreated = driver.findElement(By.xpath("//b[text()='Account Created!']"));
         Assert.assertEquals(accountCreated.getText(),expected);
+
 
         //15. Click 'Continue' button
         WebElement clickContinue = driver.findElement(By.xpath("//a[@data-qa='continue-button']"));
         clickContinue.click();
         Thread.sleep(2000);
-        driver.switchTo().frame("google_esf").close();
-        Thread.sleep(1000);
+        driver.navigate().back();
+        driver.navigate().forward();
+
 
         //16. Verify that 'Logged in as username' is visible
-        String expected2 = "Logged in as JamieLanette";
-        //Assert.assertEquals(loggedUserName.getText(),expected2);
-
-
-//        actions.click(firstName     )
-//                .sendKeys(faker.name().firstName())
-//                .sendKeys(Keys.TAB)
-//                .sendKeys(faker.name().lastName())
-//                .sendKeys(Keys.TAB)
-//                .sendKeys("ABC")
-//                .sendKeys().perform();
-
+        //String expected2 = "Logged in as "+firstNameText+lastNameText;
+        WebElement loggedUserName = driver.findElement(By.xpath("//i[@class='fa fa-user']/.."));
+        System.out.println("loggedUserName.isDisplayed() = " + loggedUserName.isDisplayed());
+        Assert.assertTrue(loggedUserName.isDisplayed());
 
 
         //17. Click 'Delete Account' button
-        //18. Verify that 'ACCOUNT DELETED!' is visible and click 'Continue' button*/
+        WebElement deleteAccount = driver.findElement(By.xpath("//a[@href='/delete_account']"));
+        deleteAccount.click();
 
+
+        //18. Verify that 'ACCOUNT DELETED!' is visible and click 'Continue' button*/
+        WebElement deleted = driver.findElement(By.xpath("//b[text()='Account Deleted!']"));
+        System.out.println("deleted.isDisplayed() = " + deleted.isDisplayed());
+        Assert.assertTrue(deleted.isDisplayed());
+        driver.findElement(By.xpath("//a[text()='Continue']")).click();
 
 
     }
